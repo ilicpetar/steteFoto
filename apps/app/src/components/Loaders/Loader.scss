@@ -1,0 +1,125 @@
+@keyframes shine-lines {
+  0% {
+    background-position: -100px;
+  }
+  40% {
+    background-position: 140px;
+  }
+  100% {
+    background-position: 400px;
+  }
+}
+
+$animation-duration: 1s;
+
+@mixin background-gradient {
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0px, rgb(255, 255, 255) 40px, rgba(0, 0, 0, 0) 80px);
+  background-size: 800px;
+}
+
+.Loader-navigation {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: border-box;
+  margin-left: -25px;
+  padding: 5px;
+
+  &-icon {
+    display: inline-block;
+    width: 33px;
+    height: 33px;
+    background-color: rgba(255, 255, 255, 0.33);
+    border-radius: 12px;
+    @include background-gradient;
+    animation: shine-lines $animation-duration infinite ease-out;
+  }
+
+  &-label {
+    display: inline-block;
+    height: 33px;
+    background-color: rgba(255, 255, 255, 0.33);
+    border-radius: 10px;
+    width: 60%;
+    font-size: 30px;
+    @include background-gradient;
+    animation: shine-lines $animation-duration infinite ease-out;
+  }
+
+  &-logo {
+    display: inline-block;
+    top: 13px;
+    left: 25px;
+    height: 33px;
+    background-color: rgba(255, 255, 255, 0.33);
+    border-radius: 10px;
+    width: 300px;
+    font-size: 30px;
+    @include background-gradient;
+    animation: shine-lines $animation-duration infinite ease-out;
+  }
+
+  &-burger {
+    display: none;
+    width: 33px;
+    height: 33px;
+    background-color: rgba(255, 255, 255, 0.33);
+    border-radius: 12px;
+    margin-right: 10px;
+    @include background-gradient;
+    animation: shine-lines $animation-duration infinite ease-out;
+  }
+
+  @media (max-width: 1399px) {
+    margin-left: -30px;
+
+    &-burger {
+      display: inline-block;
+    }
+    &-label {
+      display: none;
+    }
+  }
+}
+
+.Loader-section-title {
+  height: 37px;
+  background-color: rgba(0, 0, 0, 0.33);
+  display: block;
+  border-radius: 10px;
+  width: 350px;
+  font-size: 36px;
+  @include background-gradient;
+  animation: shine-lines $animation-duration infinite ease-out;
+}
+
+.Loader-panel {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+
+  &-content {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.09);
+    border-radius: 8px;
+    width: 100%;
+    min-height: 60vh;
+    @include background-gradient;
+    animation: shine-lines $animation-duration infinite ease-out;
+  }
+}
+
+.Loader {
+  .Dashboard-login {
+    display: none !important;
+  }
+
+  @media (max-width: 1399px) {
+    .Icon--hamburger {
+      display: none !important;
+    }
+    .Dashboard-logo {
+      margin-left: 0 !important;
+    }
+  }
+}

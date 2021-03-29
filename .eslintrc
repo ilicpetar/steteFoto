@@ -1,0 +1,8 @@
+{
+  "extends": "@gef-ui/eslint-config-gef",
+  "settings": {
+    "react": {
+      "version": "16.13"
+    }
+  }
+}
