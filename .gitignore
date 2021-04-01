@@ -1,0 +1,28 @@
+node_modules
+temp
+dll
+npm-debug.log
+build
+coverage
+.history
+last_commit_message
+commit
+changelog_email.html
+changelog_mm.md
+package-lock.json
+junit.xml
+
+# Exclude IDE project folders
+.idea
+*.iml
+*.sublime-project
+*.sublime-workspace
+jsconfig.json
+system.js
+.vscode
+
+# OS files
+.DS_STORE
+lerna-debug.log
+package-lock.json
+yarn-error.log

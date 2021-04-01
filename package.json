@@ -51,32 +51,6 @@
     "lint-staged": "10.5.3",
     "rimraf": "3.0.2"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "jest": {
-    "globals": {
-      "__EMBEDDED__": true
-    }
-  },
-  "lint-staged": {
-    "*.js?(x)": [
-      "prettier --write",
-      "git add",
-      "eslint --fix",
-      "git add"
-    ],
-    "*.json": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.scss": [
-      "prettier --write",
-      "git add"
-    ]
-  },
   "main": "index.js",
   "name": "steteFoto",
   "private": true,
