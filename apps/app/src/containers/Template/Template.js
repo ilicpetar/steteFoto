@@ -21,6 +21,7 @@ import SidebarMenu from './components/SidebarMenu';
 import DropdownList from './components/DropdownList';
 import NavbarMenu from './components/NavbarMenu';
 import ImageLoader from '../../components/images';
+import ImageGallery from '../../components/ImageGallery';
 
 //komntar
 const LandingPage = ({ children }) => {
@@ -191,8 +192,10 @@ const LandingPage = ({ children }) => {
 		<TextField floatingLabelText="doc path" outline="true" name="docPath"  value={state.docPath} onChange={handleChange} />
 		</GridCol> */}
 				</Grid>
-				<ImageLoader copyTo={state.docPath} />
+				<ImageGallery />
+				<ImageLoader copyTo={state.docPath} />				
 			</Panel>
+			
 		</ControlledDashboard>
 	);
 };
