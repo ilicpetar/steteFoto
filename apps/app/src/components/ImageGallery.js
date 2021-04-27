@@ -1,5 +1,12 @@
 import React from 'react';
 import Gallery from 'react-grid-gallery';
+import vozilo1 from '../../assets/images/vozila/skoda1.jpg';
+
+const src = ["https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg"
+,"https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg"
+,"https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg"
+,"https://c2.staticflickr.com/9/8356/28897120681_3b2c0f43e0_b.jpg"
+]
 
 const IMAGES =
 [{
@@ -19,20 +26,26 @@ const IMAGES =
         caption: "Boats (Jeshu John - designerspics.com)"
 },
 {
-        src: "https://www.youtube.com/watch?v=HMMY3d1Fpf0",
-        thumbnail: "https://www.youtube.com/watch?v=HMMY3d1Fpf0",
+        src:  vozilo1,
+        thumbnail: vozilo1,
         thumbnailWidth: 320,
         thumbnailHeight: 212,
 },
 {
         src: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
-        thumbnail: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_n.jpg",
+        thumbnail: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_b.jpg",
+        // thumbnail: "https://c4.staticflickr.com/9/8887/28897124891_98c4fdd82b_n.jpg",
         thumbnailWidth: 320,
         thumbnailHeight: 212
 }]
 
 function ImageGallery() {
-  return  <Gallery images={IMAGES} backdropClosesModal={true}/>
+      
+
+    console.log(window.innerWidth,window.innerHeight)
+       
+  return <Gallery images={IMAGES} backdropClosesModal={true}/>
+
 }
 
 export default ImageGallery;

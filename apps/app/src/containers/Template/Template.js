@@ -179,7 +179,7 @@ const LandingPage = ({ children }) => {
 							onChange={handleChange}
 						/>
 					</GridCol>
-					<GridCol sizeXS={12}>
+					<GridCol sizeXS={12} >
 						<TextField
 							floatingLabelText="Dodatni opis"
 							outline="true"
@@ -191,11 +191,17 @@ const LandingPage = ({ children }) => {
 					{/* <GridCol sizeXS={4}>
 		<TextField floatingLabelText="doc path" outline="true" name="docPath"  value={state.docPath} onChange={handleChange} />
 		</GridCol> */}
-				</Grid>
-				<ImageGallery />
-				<ImageLoader copyTo={state.docPath} />				
+				<GridCol sizeXS={12} className="m--lg" >
+						<ImageGallery />
+				</GridCol>
+				<GridCol sizeXS={12}>
+					<ImageLoader copyTo={state.docPath} />
+				</GridCol>
+			</Grid>
+				
+				
 			</Panel>
-			
+				
 		</ControlledDashboard>
 	);
 };
