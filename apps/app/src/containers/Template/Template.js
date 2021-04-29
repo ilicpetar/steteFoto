@@ -38,6 +38,7 @@ const LandingPage = ({ children }) => {
 		opis: '',
 		opis2: '',
 		docPath: '',
+		error: false,
 	});
 	const [isChecked, setIsChecked] = useState(false);
 	const handleCheckboxChange = (event) => {
@@ -51,7 +52,17 @@ const LandingPage = ({ children }) => {
 			[e.target.name]: value,
 		});
 	}
+
+	const validate = (input) => {
+		setState({ error: false });
+		const pattern = /[a-zA-Z]-\d+\/\d{4}/;
+		if (!pattern.test(input)) {
+			setState({ error: true });
+		}
+	};
 	const handleApi = () => {
+		validate(state.brStete);
+
 		//(getData({endpoint: "https://t-ws.generali.rs:5000/api/File/GetDamageById?brStete=AO-4251/2021"})).then((data) =>
 		axios
 			.get(`https://t-ws.generali.rs:5000/api/File/GetDamageById?brStete=${state.brStete}`)
@@ -94,6 +105,10 @@ const LandingPage = ({ children }) => {
 				<Grid className="example-background">
 					<GridCol sizeXS={4}>
 						<TextField
+							required
+							validationText={state.error ? 'Unesite ispravan broj stete' : ''}
+							controlClassName={state.error ? 'Input--typeError' : ''}
+							validationClassName={state.error ? 'Validation--typeError' : ''}
 							floatingLabelText="Broj štete"
 							outline="true"
 							name="brStete"
@@ -179,7 +194,7 @@ const LandingPage = ({ children }) => {
 							onChange={handleChange}
 						/>
 					</GridCol>
-					<GridCol sizeXS={12} >
+					<GridCol sizeXS={12}>
 						<TextField
 							floatingLabelText="Dodatni opis"
 							outline="true"
@@ -191,17 +206,14 @@ const LandingPage = ({ children }) => {
 					{/* <GridCol sizeXS={4}>
 		<TextField floatingLabelText="doc path" outline="true" name="docPath"  value={state.docPath} onChange={handleChange} />
 		</GridCol> */}
-				<GridCol sizeXS={12} className="m--lg" >
+					<GridCol sizeXS={12} className="m--lg">
 						<ImageGallery />
-				</GridCol>
-				<GridCol sizeXS={12}>
-					<ImageLoader copyTo={state.docPath} />
-				</GridCol>
-			</Grid>
-				
-				
+					</GridCol>
+					<GridCol sizeXS={12}>
+						<ImageLoader copyTo={state.docPath} />
+					</GridCol>
+				</Grid>
 			</Panel>
-				
 		</ControlledDashboard>
 	);
 };
