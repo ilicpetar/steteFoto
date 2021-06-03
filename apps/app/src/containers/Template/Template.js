@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -26,6 +26,13 @@ import ImageGallery from '../../components/ImageGallery';
 //komntar
 const LandingPage = ({ children }) => {
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		inputRef.current.focus();
+	}, []);
+
+	const inputRef = useRef(null);
+
 	const [state, setState] = useState({
 		brStete: '',
 		vrstaOsiguranja: '',
@@ -57,11 +64,12 @@ const LandingPage = ({ children }) => {
 		setState({ error: false });
 		const pattern = /[a-zA-Z]-\d+\/\d{4}/;
 		if (!pattern.test(input)) {
-			setState({ error: true });
+			setState({ ...state, error: true });
 		}
 	};
 	const handleApi = () => {
 		validate(state.brStete);
+		if (state.error) return inputRef.current.focus();
 
 		//(getData({endpoint: "https://t-ws.generali.rs:5000/api/File/GetDamageById?brStete=AO-4251/2021"})).then((data) =>
 		axios
@@ -106,6 +114,7 @@ const LandingPage = ({ children }) => {
 					<GridCol sizeXS={4}>
 						<TextField
 							required
+							autofocus
 							validationText={state.error ? 'Unesite ispravan broj stete' : ''}
 							controlClassName={state.error ? 'Input--typeError' : ''}
 							validationClassName={state.error ? 'Validation--typeError' : ''}
@@ -114,6 +123,8 @@ const LandingPage = ({ children }) => {
 							name="brStete"
 							value={state.brStete}
 							onChange={handleChange}
+							defaultValue=""
+							ref={inputRef}
 						/>
 					</GridCol>
 					<GridCol sizeXS={8}>
