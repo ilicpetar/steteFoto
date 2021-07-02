@@ -14,6 +14,7 @@ import {
 	GridDisplaySizes,
 	GridSpaceTypes,
 } from '@gef-ui/components/organisms/Grid';
+import { ListBox, ListBoxItem } from '@gef-ui/components/organisms/ListBox';
 import { getData } from '@gef-ui/middleware-api/facade';
 import Button from '@gef-ui/components/atoms/Button';
 import Logo from './components/Logo';
@@ -22,6 +23,15 @@ import DropdownList from './components/DropdownList';
 import NavbarMenu from './components/NavbarMenu';
 import ImageLoader from '../../components/images';
 import ImageGallery from '../../components/ImageGallery';
+
+var documents = [
+	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
+	'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/ddWinComicsPromo-2.jpg',
+	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
+	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
+	'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/ddWinComicsPromo-2.jpg',
+	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
+];
 
 //komntar
 const LandingPage = ({ children }) => {
@@ -46,7 +56,10 @@ const LandingPage = ({ children }) => {
 		opis2: '',
 		docPath: '',
 		error: false,
+		images: [],
 	});
+
+	const [stateImages, SetStateImages] = useState([]);
 	const [isChecked, setIsChecked] = useState(false);
 	const handleCheckboxChange = (event) => {
 		setIsChecked(event.target.checked);
@@ -73,30 +86,43 @@ const LandingPage = ({ children }) => {
 
 		//(getData({endpoint: "https://t-ws.generali.rs:5000/api/File/GetDamageById?brStete=AO-4251/2021"})).then((data) =>
 		axios
-			.get(`https://t-ws.generali.rs:5000/api/File/GetDamageById?brStete=${state.brStete}`)
+			.get(`https://t-ws.generali.rs:20044/api/File/GetDamageById?brStete=${state.brStete}`)
 			.then((res) => {
-				//   console.log(res.data[0])
-				//   console.log(res.data[0].brStete)
+				console.log(res.data[0]);
+				console.log(res.data[0].brStete);
+				console.log(res.data[0].brPolise);
+				console.log(res);
 
 				setState({
 					...state,
-					brStete: res.data.brStete,
-					vrstaOsiguranja: res.data.vrstaOsiguranja,
-					datumNastanka: res.data.datumNastanka,
-					datumPrijave: res.data.datumPrijave,
-					brObracunaStete: res.data.brObracunaStete,
-					datumLikvidacije: res.data.datumLikvidacije,
-					brPolise: res.data.brPolise,
-					osiguranik: res.data.osiguranik,
-					opis1: res.data.opis1,
-					opis2: res.data.opis2,
-					docPath: res.data.docPath,
+					brStete: res.data[0].brStete,
+					vrstaOsiguranja: res.data[0].vrstaOsiguranja,
+					datumNastanka: res.data[0].datumNastanka,
+					datumPrijave: res.data[0].datumPrijave,
+					brObracunaStete: res.data[0].brObracunaStete,
+					datumLikvidacije: res.data[0].datumLikvidacije,
+					brPolise: res.data[0].brPolise,
+					osiguranik: res.data[0].osiguranik,
+					opis1: res.data[0].opis1,
+					opis2: res.data[0].opis2,
+					docPath: res.data[0].docPath,
 				});
+				console.log('state stete', state);
 			})
 			.catch((err) => console.log(err));
-		//   console.log(data.body)
-	};
 
+		axios
+			.get(
+				`https://t-ws.generali.rs:20044/api/File/linktofile?brstete=AO-4251%2F2021&maxWidth=99999&maxHeight=1024`
+			)
+			.then((res) => {
+				console.log(res);
+				SetStateImages(res.data);
+			})
+			.catch((err) => console.log(err));
+	};
+	console.log('state', state);
+	console.log('state img', stateImages);
 	return (
 		<ControlledDashboard
 			navbarMenuElement={<NavbarMenu />}
@@ -217,8 +243,26 @@ const LandingPage = ({ children }) => {
 					{/* <GridCol sizeXS={4}>
 		<TextField floatingLabelText="doc path" outline="true" name="docPath"  value={state.docPath} onChange={handleChange} />
 		</GridCol> */}
+					<GridCol sizeXS={12}>
+						<h4>Arhiva dokumentacije</h4>
+					</GridCol>
+					{documents.map((d) => (
+						<GridCol sizeXS={3}>
+							<a href={d} target="_blank">
+								{d.split('/')[d.split('/').length - 1]}
+							</a>
+						</GridCol>
+					))}
+
+					{/* <a
+							href="https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf"
+							target="_blank"
+						>
+							SLIKA
+						</a> */}
+
 					<GridCol sizeXS={12} className="m--lg">
-						<ImageGallery />
+						<ImageGallery photos={stateImages} />
 					</GridCol>
 					<GridCol sizeXS={12}>
 						<ImageLoader copyTo={state.docPath} />

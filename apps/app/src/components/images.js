@@ -25,7 +25,7 @@ const Images = props => {
      //console.log(file);
     }
     //console.log(data.files);
-    axios.post(`https://t-ws.generali.rs:5000/api/File/Uplouds?copyTo=${props.copyTo}`,data).then(res=>res.data).catch(err=>console.log(err));
+    axios.post(`https://t-ws.generali.rs:20044/api/File/Uplouds?copyTo=${props.copyTo}`,data).then(res=>res.data).catch(err=>console.log(err));
     console.log(data);
     setIsLoading(false)
   }
