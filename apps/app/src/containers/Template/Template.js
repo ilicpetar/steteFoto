@@ -265,7 +265,7 @@ const LandingPage = ({ children }) => {
 						<ImageGallery photos={stateImages} />
 					</GridCol>
 					<GridCol sizeXS={12}>
-						<ImageLoader copyTo={state.docPath} />
+						<ImageLoader brStete={state.brStete} copyTo={state.docPath} />
 					</GridCol>
 				</Grid>
 			</Panel>

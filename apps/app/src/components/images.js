@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import ImageUploader from "react-images-upload";
 import Button from '@gef-ui/components/atoms/Button';	
 import { useDispatch } from 'react-redux';
@@ -8,26 +8,32 @@ import axios from 'axios';
 
 
 const Images = props => {
+
+  useEffect(() => {
+    console.log(pictures);
+  }, [pictures])
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [pictures, setPictures] = useState([]);
   const onDrop = picture => {    
-    setPictures([...pictures, picture]);
-    console.log(pictures);
+    setPictures([picture]);
+    
   };
   const handleUpload=()=>{
-    setIsLoading(true);
-    let data=new FormData();
-    for (var i = 0; i < pictures[0].length; i++) {
-      var file = pictures[0][i];    
-      // Add the file to the request.
-     data.append('files', file);
-     //console.log(file);
-    }
-    //console.log(data.files);
-    axios.post(`https://t-ws.generali.rs:20044/api/File/Uplouds?copyTo=${props.copyTo}`,data).then(res=>res.data).catch(err=>console.log(err));
-    console.log(data);
-    setIsLoading(false)
+    console.log(pictures);
+
+    // setIsLoading(true);
+    // let data=new FormData();
+    // for (var i = 0; i < pictures[0].length; i++) {
+    //   var file = pictures[0][i];    
+    //   // Add the file to the request.
+    //  data.append('files', file);
+    //  //console.log(file);
+    // }
+    // //console.log(data.files);
+    // axios.post(`https://t-ws.generali.rs:20044/api/File/Uplouds?copyTo=${props.copyTo}`,data).then(res=>res.data).catch(err=>console.log(err));
+    // console.log(data);
+    // setIsLoading(false)
   }
 
   return (
