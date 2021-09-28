@@ -23,6 +23,7 @@ import DropdownList from './components/DropdownList';
 import NavbarMenu from './components/NavbarMenu';
 import ImageLoader from '../../components/images';
 import ImageGallery from '../../components/ImageGallery';
+import ApiService from '../../services/apiService';
 
 var documents = [
 	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
@@ -59,7 +60,7 @@ const LandingPage = ({ children }) => {
 		images: [],
 	});
 
-	const [stateImages, SetStateImages] = useState([]);
+	const [stateImages, setStateImages] = useState([]);
 	const [isChecked, setIsChecked] = useState(false);
 	const handleCheckboxChange = (event) => {
 		setIsChecked(event.target.checked);
@@ -70,6 +71,7 @@ const LandingPage = ({ children }) => {
 		setState({
 			...state,
 			[e.target.name]: value,
+			error: false,
 		});
 	}
 
@@ -85,14 +87,12 @@ const LandingPage = ({ children }) => {
 		if (state.error) return inputRef.current.focus();
 
 		//(getData({endpoint: "https://t-ws.generali.rs:5000/api/File/GetDamageById?brStete=AO-4251/2021"})).then((data) =>
-		axios
-			.get(`https://t-ws.generali.rs:20044/api/File/GetDamageById?brStete=${state.brStete}`)
+		//axios
+		//.get(`https://t-ws.generali.rs:20044/api/File/GetDamageById?brStete=${state.brStete}`)
+		//.get(`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageById?brStete=${state.brStete}`)
+		// getData({ endpoint: 'https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageById?brStete=AO-4251/2021' })
+		ApiService.GetDamageById(state.brStete)
 			.then((res) => {
-				console.log(res.data[0]);
-				console.log(res.data[0].brStete);
-				console.log(res.data[0].brPolise);
-				console.log(res);
-
 				setState({
 					...state,
 					brStete: res.data[0].brStete,
@@ -107,21 +107,21 @@ const LandingPage = ({ children }) => {
 					opis2: res.data[0].opis2,
 					docPath: res.data[0].docPath,
 				});
-				console.log('state stete', state);
 			})
 			.catch((err) => console.log(err));
-
-		axios
-			.get(
-				`https://t-ws.generali.rs:20044/api/File/linktofile?brstete=AO-4251%2F2021&maxWidth=99999&maxHeight=1024`
-			)
+		// axios
+		// 	.get(
+		// 		// `https://t-ws.generali.rs:20044/api/File/linktofile?brstete=AO-4251%2F2021&maxWidth=99999&maxHeight=1024`
+		// 		`https://t-ws.generali.rs/Api/QRcips/api/File/DamageLinkFile?brstete=${state.brStete}&maxWidth=99999&maxHeight=1024`
+		// 	)
+		ApiService.GetDamageImages(state.brStete)
 			.then((res) => {
 				console.log(res);
-				SetStateImages(res.data);
+				setStateImages(res.data);
 			})
 			.catch((err) => console.log(err));
 	};
-	console.log('state', state);
+	// console.log('state', state);
 	console.log('state img', stateImages);
 	return (
 		<ControlledDashboard
