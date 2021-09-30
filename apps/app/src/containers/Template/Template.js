@@ -25,14 +25,14 @@ import ImageLoader from '../../components/images';
 import ImageGallery from '../../components/ImageGallery';
 import ApiService from '../../services/apiService';
 
-var documents = [
-	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
-	'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/ddWinComicsPromo-2.jpg',
-	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
-	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
-	'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/ddWinComicsPromo-2.jpg',
-	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
-];
+// var documents = [
+// 	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
+// 	'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/ddWinComicsPromo-2.jpg',
+// 	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
+// 	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
+// 	'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/ddWinComicsPromo-2.jpg',
+// 	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
+// ];
 
 //komntar
 const LandingPage = ({ children }) => {
@@ -60,6 +60,7 @@ const LandingPage = ({ children }) => {
 		images: [],
 	});
 
+	const [documents, setDocuments] = useState([]);
 	const [stateImages, setStateImages] = useState([]);
 	const [isChecked, setIsChecked] = useState(false);
 	const handleCheckboxChange = (event) => {
@@ -120,6 +121,14 @@ const LandingPage = ({ children }) => {
 				setStateImages(res.data);
 			})
 			.catch((err) => console.log(err));
+
+		ApiService.GetDamageArchiveLinks(state.brStete)
+			.then((res) => {
+				console.log('documents api res', res);
+				setDocuments(res.data);
+				console.log('documents api', res.data);
+			})
+			.catch((err) => console.log('documents err', err));
 	};
 	// console.log('state', state);
 	console.log('state img', stateImages);
@@ -246,10 +255,14 @@ const LandingPage = ({ children }) => {
 					<GridCol sizeXS={12}>
 						<h4>Arhiva dokumentacije</h4>
 					</GridCol>
+					{console.log('documents', documents)}
 					{documents.map((d) => (
 						<GridCol sizeXS={3}>
-							<a href={d} target="_blank">
-								{d.split('/')[d.split('/').length - 1]}
+							<a
+								href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}
+								target="_blank"
+							>
+								{d.fname}
 							</a>
 						</GridCol>
 					))}

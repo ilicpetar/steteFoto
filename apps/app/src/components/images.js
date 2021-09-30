@@ -5,18 +5,22 @@ import { useDispatch } from 'react-redux';
 import { getData } from '@gef-ui/middleware-api/facade';
 import axios from 'axios';
 import ApiService from "../services/apiService";
+import * as config from "../services/config";
 
 
 
 
 const Images = props => {
 
+
   useEffect(() => {
     console.log(pictures);
   }, [pictures])
+
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [pictures, setPictures] = useState([]);
+  
   const onDrop = picture => {    
     setPictures([picture]);
     
@@ -30,24 +34,24 @@ const Images = props => {
 
     setIsLoading(true);
 
-    // po seljacki
+    // // po seljacki
 
-    let data=new FormData();
-    var file = pictures[0][0];
-    data.append('file', file);
+    // let data=new FormData();
+    // var file = pictures[0][0];
+    // data.append('file', file);
 
 
 
     // let formList = [];
 
-    // let data=new FormData();
-    // for (var i = 0; i < pictures[0].length; i++) {
-    //   var file = pictures[0][i];    
-    //   // Add the file to the request.
-    //  data.append('file', file);
-    //  //formList.push(data);
-    //   console.log(file);
-    // }
+    let data=new FormData();
+    for (var i = 0; i < pictures[0].length; i++) {
+      var file = pictures[0][i];    
+      // Add the file to the request.
+     data.append('files', file);
+     //formList.push(data);
+      console.log(file);
+    }
 
   //   let data=new FormData();
 
@@ -61,13 +65,21 @@ const Images = props => {
     //axios.post(`https://t-ws.generali.rs:20044/api/File/Uplouds?copyTo=${props.copyTo}`,data).then(res=>res.data).catch(err=>console.log(err));
 
     
-    console.log('prepoziva');
+    console.log('prepoziva formdata');
     console.log('data',data);
-    axios.post(`https://t-ws.generali.rs/Api/QRcips/api/File​/DamageUploud?brStete=${props.brStete}`,data,{
+
+
+    // // radi
+
+    axios.post(`${config.APIENDPOINT}/File/DamageUplouds?brStete=${props.brStete}`,data,{
       headers: {
           "Content-Type": "multipart/form-data"
       }
-      });
+      }).then(res=>{console.log('api then',res);setIsLoading(false);})
+      .catch(err=>{console.log('api err',err);setIsLoading(false)});
+
+    
+
 
       // console.log(res.data.files);
       // console.log(res.data.form);
@@ -75,12 +87,21 @@ const Images = props => {
      
 
     console.log('data',props.brStete,data);
-    // "ApiService.PostDamageUploads(props.brStete,data).then(res=>console.log('api then',res)).catch(err=>console.log('api err',err));
+    //  ApiService.PostDamageUploads(props.brStete,data).then(res=>console.log('api then',res)).catch(err=>console.log('api err',err));
     
-     setIsLoading(false)
+     
+  }
+
+  const handlePDF = () =>{
+
+    ApiService.PostImagesToPDF(props.brStete)
+    .then(res=>{console.log('api then pdf',res)})
+    .catch(err=>{console.log('api err pdf',err)});
+    
   }
 
   return (
+  
     <div className="container">
     <ImageUploader
       {...props}
@@ -92,9 +113,11 @@ const Images = props => {
     />
     <div align="right">
     <Button label="Upload" primary onClick={handleUpload}/>&nbsp;
-    <Button label="Create PDF" align="right" primary onClick={handleUpload}/>
+    <Button label="Create PDF" align="right" primary onClick={handlePDF}/>
      </div>     
     </div>
+
+    
   );  
 };
 export default Images;
