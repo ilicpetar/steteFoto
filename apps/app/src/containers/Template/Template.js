@@ -24,15 +24,12 @@ import NavbarMenu from './components/NavbarMenu';
 import ImageLoader from '../../components/images';
 import ImageGallery from '../../components/ImageGallery';
 import ApiService from '../../services/apiService';
-
-// var documents = [
-// 	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
-// 	'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/ddWinComicsPromo-2.jpg',
-// 	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
-// 	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
-// 	'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/ddWinComicsPromo-2.jpg',
-// 	'https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf',
-// ];
+import { REDUCER_NAME } from '@gef-ui/features/modalLoader/constants';
+import modalLoaderReducer from '@gef-ui/features/modalLoader/reducers/defaultReducer';
+import ModalLoaderProvider from '@gef-ui/features/modalLoader/containers/ModalLoaderProvider';
+import { hide, show, showAndHide, updateDescription } from '@gef-ui/features/modalLoader/actions';
+// import { prefix } from './ModalLoader.routes';
+// import mdx from './ModalLoader.mdx';
 
 //komntar
 const LandingPage = ({ children }) => {
@@ -83,206 +80,246 @@ const LandingPage = ({ children }) => {
 			setState({ ...state, error: true });
 		}
 	};
-	const handleApi = () => {
+	const handleApi = async () => {
+		dispatch(show());
 		validate(state.brStete);
 		if (state.error) return inputRef.current.focus();
 
-		//(getData({endpoint: "https://t-ws.generali.rs:5000/api/File/GetDamageById?brStete=AO-4251/2021"})).then((data) =>
-		//axios
-		//.get(`https://t-ws.generali.rs:20044/api/File/GetDamageById?brStete=${state.brStete}`)
-		//.get(`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageById?brStete=${state.brStete}`)
-		// getData({ endpoint: 'https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageById?brStete=AO-4251/2021' })
-		ApiService.GetDamageById(state.brStete)
-			.then((res) => {
-				setState({
-					...state,
-					brStete: res.data[0].brStete,
-					vrstaOsiguranja: res.data[0].vrstaOsiguranja,
-					datumNastanka: res.data[0].datumNastanka,
-					datumPrijave: res.data[0].datumPrijave,
-					brObracunaStete: res.data[0].brObracunaStete,
-					datumLikvidacije: res.data[0].datumLikvidacije,
-					brPolise: res.data[0].brPolise,
-					osiguranik: res.data[0].osiguranik,
-					opis1: res.data[0].opis1,
-					opis2: res.data[0].opis2,
-					docPath: res.data[0].docPath,
-				});
-			})
-			.catch((err) => console.log(err));
-		// axios
-		// 	.get(
-		// 		// `https://t-ws.generali.rs:20044/api/File/linktofile?brstete=AO-4251%2F2021&maxWidth=99999&maxHeight=1024`
-		// 		`https://t-ws.generali.rs/Api/QRcips/api/File/DamageLinkFile?brstete=${state.brStete}&maxWidth=99999&maxHeight=1024`
-		// 	)
-		ApiService.GetDamageImages(state.brStete)
-			.then((res) => {
-				console.log(res);
-				setStateImages(res.data);
-			})
-			.catch((err) => console.log(err));
+		// ApiService.GetDamageById(state.brStete)
+		// 	.then((res) => {
+		// 		setState({
+		// 			...state,
+		// 			brStete: res.data[0].brStete,
+		// 			vrstaOsiguranja: res.data[0].vrstaOsiguranja,
+		// 			datumNastanka: res.data[0].datumNastanka,
+		// 			datumPrijave: res.data[0].datumPrijave,
+		// 			brObracunaStete: res.data[0].brObracunaStete,
+		// 			datumLikvidacije: res.data[0].datumLikvidacije,
+		// 			brPolise: res.data[0].brPolise,
+		// 			osiguranik: res.data[0].osiguranik,
+		// 			opis1: res.data[0].opis1,
+		// 			opis2: res.data[0].opis2,
+		// 			docPath: res.data[0].docPath,
+		// 		});
 
-		ApiService.GetDamageArchiveLinks(state.brStete)
-			.then((res) => {
-				console.log('documents api res', res);
-				setDocuments(res.data);
-				console.log('documents api', res.data);
-			})
-			.catch((err) => console.log('documents err', err));
+		// 		dispatch(hide());
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 		dispatch(hide());
+		// 	});
+
+		// ApiService.GetDamageImages(state.brStete)
+		// 	.then((res) => {
+		// 		setStateImages(res.data);
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 		dispatch(hide());
+		// 	});
+
+		// ApiService.GetDamageArchiveLinks(state.brStete)
+		// 	.then((res) => {
+		// 		setDocuments(res.data);
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 		dispatch(hide());
+		// 	});
+
+		try {
+			const [request1, request2, request3] = await Promise.all([
+				ApiService.GetDamageById(state.brStete),
+				ApiService.GetDamageArchiveLinks(state.brStete),
+				ApiService.GetDamageImages(state.brStete),
+			]);
+
+			setState({
+				...state,
+				brStete: request1.data[0].brStete,
+				vrstaOsiguranja: request1.data[0].vrstaOsiguranja,
+				datumNastanka: request1.data[0].datumNastanka,
+				datumPrijave: request1.data[0].datumPrijave,
+				brObracunaStete: request1.data[0].brObracunaStete,
+				datumLikvidacije: request1.data[0].datumLikvidacije,
+				brPolise: request1.data[0].brPolise,
+				osiguranik: request1.data[0].osiguranik,
+				opis1: request1.data[0].opis1,
+				opis2: request1.data[0].opis2,
+				docPath: request1.data[0].docPath,
+			});
+
+			setDocuments(request2.data);
+			setStateImages(request3.data);
+
+			dispatch(hide());
+		} catch (err) {
+			console.log(err);
+			dispatch(hide());
+		}
 	};
-	// console.log('state', state);
-	console.log('state img', stateImages);
+	const onImages = (values) => {
+		setStateImages(values);
+	};
+
+	const onDocuments = (values) => {
+		setDocuments(values);
+	};
+
 	return (
-		<ControlledDashboard
-			navbarMenuElement={<NavbarMenu />}
-			navbarDropdownListElement={<DropdownList />}
-			sidebarMenuElement={<SidebarMenu />}
-			logoElement={<Logo />}
-		>
-			<Panel
-				className="panel"
-				highlighted="true"
-				heading="AO FOTO"
-				footerElement={<div>Generali Osiguranje Srbija</div>}
+		<>
+			<ControlledDashboard
+				navbarMenuElement={<NavbarMenu />}
+				navbarDropdownListElement={<DropdownList />}
+				sidebarMenuElement={<SidebarMenu />}
+				logoElement={<Logo />}
 			>
-				<Grid className="example-background">
-					<GridCol sizeXS={4}>
-						<TextField
-							required
-							autofocus
-							validationText={state.error ? 'Unesite ispravan broj stete' : ''}
-							controlClassName={state.error ? 'Input--typeError' : ''}
-							validationClassName={state.error ? 'Validation--typeError' : ''}
-							floatingLabelText="Broj štete"
-							outline="true"
-							name="brStete"
-							value={state.brStete}
-							onChange={handleChange}
-							defaultValue=""
-							ref={inputRef}
-						/>
-					</GridCol>
-					<GridCol sizeXS={8}>
-						<Button label="Traži" primary onClick={handleApi} />
-					</GridCol>
-					<GridCol sizeXS={3}>
-						<TextField
-							floatingLabelText="Broj polise"
-							outline="true"
-							name="brPolise"
-							value={state.brPolise}
-							onChange={handleChange}
-						/>
-					</GridCol>
-					<GridCol sizeXS={3}>
-						<TextField
-							floatingLabelText="Vrsta osiguranja"
-							outline="true"
-							name="vrstaOsiguranja"
-							value={state.vrstaOsiguranja}
-							onChange={handleChange}
-						/>
-					</GridCol>
-					<GridCol sizeXS={3}>
-						<TextField
-							floatingLabelText="Osiguranik"
-							outline="true"
-							name="osiguranik"
-							value={state.osiguranik}
-							onChange={handleChange}
-						/>
-					</GridCol>
-					<GridCol sizeXS={3}>
-						<TextField
-							floatingLabelText="Broj obračuna štete"
-							outline="true"
-							name="brObracunaStete"
-							value={state.brObracunaStete}
-							onChange={handleChange}
-						/>
-					</GridCol>
-					<GridCol sizeXS={3}>
-						<TextField
-							floatingLabelText="Datum prijave"
-							outline="true"
-							name="datumPrijave"
-							value={state.datumPrijave}
-							onChange={handleChange}
-						/>
-					</GridCol>
-					<GridCol sizeXS={3}>
-						<TextField
-							floatingLabelText="Datum nastanka"
-							outline="true"
-							name="datumNastanka"
-							value={state.datumNastanka}
-							onChange={handleChange}
-						/>
-					</GridCol>
-					<GridCol sizeXS={3}>
-						<TextField
-							floatingLabelText="Datum likvidacije"
-							outline="true"
-							name="datumLikvidacije"
-							value={state.datumLikvidacije}
-							onChange={handleChange}
-						/>
-					</GridCol>
-					<GridCol sizeXS={3}>
-						<Checkbox label="Rešena" name="resena" checked={isChecked} onChange={handleCheckboxChange} />
-					</GridCol>
-					<GridCol sizeXS={9}>
-						<TextField
-							floatingLabelText="Opis"
-							outline="true"
-							name="opis"
-							value={state.opis}
-							onChange={handleChange}
-						/>
-					</GridCol>
-					<GridCol sizeXS={12}>
-						<TextField
-							floatingLabelText="Dodatni opis"
-							outline="true"
-							name="opis2"
-							value={state.opis2}
-							onChange={handleChange}
-						/>
-					</GridCol>
-					{/* <GridCol sizeXS={4}>
-		<TextField floatingLabelText="doc path" outline="true" name="docPath"  value={state.docPath} onChange={handleChange} />
-		</GridCol> */}
-					<GridCol sizeXS={12}>
-						<h4>Arhiva dokumentacije</h4>
-					</GridCol>
-					{console.log('documents', documents)}
-					{documents.map((d) => (
-						<GridCol sizeXS={3}>
-							<a
-								href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}
-								target="_blank"
-							>
-								{d.fname}
-							</a>
+				<Panel
+					className="panel"
+					highlighted="true"
+					heading="AO FOTO"
+					footerElement={<div>Generali Osiguranje Srbija</div>}
+				>
+					<Grid className="example-background">
+						<GridCol sizeXS={4}>
+							<TextField
+								required
+								autofocus
+								validationText={state.error ? 'Unesite ispravan broj stete' : ''}
+								controlClassName={state.error ? 'Input--typeError' : ''}
+								validationClassName={state.error ? 'Validation--typeError' : ''}
+								floatingLabelText="Broj štete"
+								outline="true"
+								name="brStete"
+								value={state.brStete}
+								onChange={handleChange}
+								defaultValue=""
+								ref={inputRef}
+							/>
 						</GridCol>
-					))}
+						<GridCol sizeXS={8}>
+							<Button label="Traži" primary onClick={handleApi} />
+						</GridCol>
+						<GridCol sizeXS={3}>
+							<TextField
+								floatingLabelText="Broj polise"
+								outline="true"
+								name="brPolise"
+								value={state.brPolise}
+								onChange={handleChange}
+							/>
+						</GridCol>
+						<GridCol sizeXS={3}>
+							<TextField
+								floatingLabelText="Vrsta osiguranja"
+								outline="true"
+								name="vrstaOsiguranja"
+								value={state.vrstaOsiguranja}
+								onChange={handleChange}
+							/>
+						</GridCol>
+						<GridCol sizeXS={3}>
+							<TextField
+								floatingLabelText="Osiguranik"
+								outline="true"
+								name="osiguranik"
+								value={state.osiguranik}
+								onChange={handleChange}
+							/>
+						</GridCol>
+						<GridCol sizeXS={3}>
+							<TextField
+								floatingLabelText="Broj obračuna štete"
+								outline="true"
+								name="brObracunaStete"
+								value={state.brObracunaStete}
+								onChange={handleChange}
+							/>
+						</GridCol>
+						<GridCol sizeXS={3}>
+							<TextField
+								floatingLabelText="Datum prijave"
+								outline="true"
+								name="datumPrijave"
+								value={state.datumPrijave}
+								onChange={handleChange}
+							/>
+						</GridCol>
+						<GridCol sizeXS={3}>
+							<TextField
+								floatingLabelText="Datum nastanka"
+								outline="true"
+								name="datumNastanka"
+								value={state.datumNastanka}
+								onChange={handleChange}
+							/>
+						</GridCol>
+						<GridCol sizeXS={3}>
+							<TextField
+								floatingLabelText="Datum likvidacije"
+								outline="true"
+								name="datumLikvidacije"
+								value={state.datumLikvidacije}
+								onChange={handleChange}
+							/>
+						</GridCol>
+						<GridCol sizeXS={3}>
+							<Checkbox
+								label="Rešena"
+								name="resena"
+								checked={isChecked}
+								onChange={handleCheckboxChange}
+							/>
+						</GridCol>
+						<GridCol sizeXS={9}>
+							<TextField
+								floatingLabelText="Opis"
+								outline="true"
+								name="opis"
+								value={state.opis}
+								onChange={handleChange}
+							/>
+						</GridCol>
+						<GridCol sizeXS={12}>
+							<TextField
+								floatingLabelText="Dodatni opis"
+								outline="true"
+								name="opis2"
+								value={state.opis2}
+								onChange={handleChange}
+							/>
+						</GridCol>
+						<GridCol sizeXS={12}>
+							<h4>Arhiva dokumentacije</h4>
+						</GridCol>
+						{console.log('documents', documents)}
+						{documents.map((d) => (
+							<GridCol sizeXS={3}>
+								<a
+									href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}
+									target="_blank"
+								>
+									{d.fname}
+								</a>
+							</GridCol>
+						))}
 
-					{/* <a
-							href="https://cdn.asp.events/CLIENT_ASP_Them_32933FC0_5056_B733_49552A1E34E6BB6F/sites/Bloom/media/libraries/brochures/D5816447-F237-DD89-067FA33B2930B2C8-document.pdf"
-							target="_blank"
-						>
-							SLIKA
-						</a> */}
-
-					<GridCol sizeXS={12} className="m--lg">
-						<ImageGallery photos={stateImages} />
-					</GridCol>
-					<GridCol sizeXS={12}>
-						<ImageLoader brStete={state.brStete} copyTo={state.docPath} />
-					</GridCol>
-				</Grid>
-			</Panel>
-		</ControlledDashboard>
+						<GridCol sizeXS={12} className="m--lg">
+							<ImageGallery photos={stateImages} />
+						</GridCol>
+						<GridCol sizeXS={12}>
+							<ImageLoader
+								brStete={state.brStete}
+								copyTo={state.docPath}
+								onImages={onImages}
+								onDocuments={onDocuments}
+							/>
+						</GridCol>
+					</Grid>
+				</Panel>
+			</ControlledDashboard>
+			<ModalLoaderProvider />
+		</>
 	);
 };
 

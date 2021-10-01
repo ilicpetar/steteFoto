@@ -54,6 +54,7 @@
   },
   "main": "index.js",
   "name": "steteFoto",
+  "proxy":"http://t-ws.generali.rs:9001",
   "private": true,
   "scripts": {
     "ci:build": "gef-scripts build --webpackConfig=./scripts/webpack-prod.config.js",

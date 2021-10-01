@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useRef } from "react";
 import ImageUploader from "react-images-upload";
 import Button from '@gef-ui/components/atoms/Button';	
 import { useDispatch } from 'react-redux';
@@ -6,6 +6,7 @@ import { getData } from '@gef-ui/middleware-api/facade';
 import axios from 'axios';
 import ApiService from "../services/apiService";
 import * as config from "../services/config";
+import { hide, show, showAndHide, updateDescription } from '@gef-ui/features/modalLoader/actions';
 
 
 
@@ -20,6 +21,8 @@ const Images = props => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [pictures, setPictures] = useState([]);
+
+  const pictureElement = useRef(null);
   
   const onDrop = picture => {    
     setPictures([picture]);
@@ -27,6 +30,7 @@ const Images = props => {
   };
 
   const handleUpload=()=>{
+    dispatch(show());
     console.log(pictures);
     console.log(props.brStete);
 
@@ -42,24 +46,16 @@ const Images = props => {
 
 
 
-    // let formList = [];
+
 
     let data=new FormData();
     for (var i = 0; i < pictures[0].length; i++) {
       var file = pictures[0][i];    
       // Add the file to the request.
      data.append('files', file);
-     //formList.push(data);
+     
       console.log(file);
     }
-
-  //   let data=new FormData();
-
-  //   for (const key of Object.keys(pictures[0])) {
-  //     console.log('key',key);
-  //     console.log('file',pictures[0][key]);
-  //     data.append('files', pictures[0][key])
-  // }
 
     //console.log(data.files);
     //axios.post(`https://t-ws.generali.rs:20044/api/File/Uplouds?copyTo=${props.copyTo}`,data).then(res=>res.data).catch(err=>console.log(err));
@@ -75,29 +71,48 @@ const Images = props => {
       headers: {
           "Content-Type": "multipart/form-data"
       }
-      }).then(res=>{console.log('api then',res);setIsLoading(false);})
+      }).then(res=>{
+        console.log('api then',res);
+        onClearImages();
+        setPictures([]);
+        setIsLoading(false);
+        ApiService.GetDamageImages(props.brStete)
+        .then((res) => {
+          console.log('api then images',res);
+          props.onImages(res.data);
+          dispatch(hide());
+        })
+        .catch((err) => console.log(err)); 
+      })
       .catch(err=>{console.log('api err',err);setIsLoading(false)});
 
     
 
-
-      // console.log(res.data.files);
-      // console.log(res.data.form);
-      // console.log(res.data.headers);
-     
-
-    console.log('data',props.brStete,data);
-    //  ApiService.PostDamageUploads(props.brStete,data).then(res=>console.log('api then',res)).catch(err=>console.log('api err',err));
     
      
   }
 
   const handlePDF = () =>{
-
+    dispatch(show());
     ApiService.PostImagesToPDF(props.brStete)
-    .then(res=>{console.log('api then pdf',res)})
+    .then(res=>{
+      console.log('api then pdf',res)
+
+      ApiService.GetDamageArchiveLinks(props.brStete)
+			.then((res) => {
+				console.log('documents api res', res);
+				props.onDocuments(res.data);
+				console.log('documents api', res.data);
+        dispatch(hide());
+			})
+			.catch((err) => console.log('documents err', err));
+    })
     .catch(err=>{console.log('api err pdf',err)});
-    
+
+  }
+
+  const onClearImages= () => {
+    pictureElement.current.clearPictures();
   }
 
   return (
@@ -107,9 +122,10 @@ const Images = props => {
       {...props}
       withIcon={true}
       onChange={onDrop}
-      imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+      imgExtension={[".jpg", ".gif", ".png", ".gif",".jpeg"]}
       maxFileSize={7242880}
       withPreview={true}
+      ref={pictureElement}
     />
     <div align="right">
     <Button label="Upload" primary onClick={handleUpload}/>&nbsp;

@@ -78,7 +78,7 @@ function ImageGallery({photos}) {
               thumbnailHeight: 320  
            } 
     ))
-    console.log('IMAGES',IMAGES)
+    console.log('IMAGES galery',IMAGES)
   return <Gallery images={IMAGES} backdropClosesModal={true}/>
 
 }
