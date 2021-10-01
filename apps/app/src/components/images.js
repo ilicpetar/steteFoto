@@ -82,9 +82,9 @@ const Images = props => {
           props.onImages(res.data);
           dispatch(hide());
         })
-        .catch((err) => console.log(err)); 
+        .catch((err) => {console.log(err);dispatch(hide());}); 
       })
-      .catch(err=>{console.log('api err',err);setIsLoading(false)});
+      .catch(err=>{console.log('api err',err);setIsLoading(false);dispatch(hide());});
 
     
 
@@ -105,9 +105,9 @@ const Images = props => {
 				console.log('documents api', res.data);
         dispatch(hide());
 			})
-			.catch((err) => console.log('documents err', err));
+			.catch((err) => {console.log('documents err', err);dispatch(hide());});
     })
-    .catch(err=>{console.log('api err pdf',err)});
+    .catch(err=>{console.log('api err pdf',err);dispatch(hide());});
 
   }
 
