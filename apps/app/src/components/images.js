@@ -84,12 +84,7 @@ const Images = props => {
         })
         .catch((err) => {console.log(err);dispatch(hide());}); 
       })
-      .catch(err=>{console.log('api err',err);setIsLoading(false);dispatch(hide());});
-
-    
-
-    
-     
+      .catch(err=>{console.log('api err',err);setIsLoading(false);dispatch(hide());}); 
   }
 
   const handlePDF = () =>{
