@@ -28,6 +28,9 @@ import { REDUCER_NAME } from '@gef-ui/features/modalLoader/constants';
 import modalLoaderReducer from '@gef-ui/features/modalLoader/reducers/defaultReducer';
 import ModalLoaderProvider from '@gef-ui/features/modalLoader/containers/ModalLoaderProvider';
 import { hide, show, showAndHide, updateDescription } from '@gef-ui/features/modalLoader/actions';
+import Toastr from '@gef-ui/components/organisms/Toastr';
+import Toast from '@gef-ui/components/organisms/Toastr/Toast';
+
 // import { prefix } from './ModalLoader.routes';
 // import mdx from './ModalLoader.mdx';
 
@@ -64,6 +67,26 @@ const LandingPage = ({ children }) => {
 		setIsChecked(event.target.checked);
 	};
 
+	const resetState = () => {
+		setState({
+			brStete: '',
+			vrstaOsiguranja: '',
+			datumNastanka: '',
+			datumPrijave: '',
+			brObracunaStete: '',
+			datumLikvidacije: '',
+			brPolise: '',
+			osiguranik: '',
+			opis: '',
+			opis2: '',
+			docPath: '',
+			error: false,
+			images: [],
+		});
+		setDocuments([]);
+		setStateImages([]);
+		setIsChecked(false);
+	};
 	function handleChange(e) {
 		const value = e.target.value;
 		setState({
@@ -80,11 +103,16 @@ const LandingPage = ({ children }) => {
 			setState({ ...state, error: true });
 		}
 	};
-	const handleApi = async () => {
-		dispatch(show());
-		validate(state.brStete);
-		if (state.error) return inputRef.current.focus();
 
+	const toast = () => {
+		<Toast id={'error'} key={'error'} renderIco message="This is toast" type={'error'} />;
+	};
+	const handleApi = async () => {
+		setState({ brStete: inputRef.current.value });
+		validate(state.brStete);
+
+		if (state.error) return inputRef.current.focus();
+		dispatch(show());
 		// ApiService.GetDamageById(state.brStete)
 		// 	.then((res) => {
 		// 		setState({
@@ -151,11 +179,12 @@ const LandingPage = ({ children }) => {
 
 			setDocuments(request2.data);
 			setStateImages(request3.data);
-
 			dispatch(hide());
 		} catch (err) {
 			console.log(err);
+			resetState();
 			dispatch(hide());
+			setState({ error: true });
 		}
 	};
 	const onImages = (values) => {
@@ -292,15 +321,26 @@ const LandingPage = ({ children }) => {
 						<GridCol sizeXS={12}>
 							<h4>Arhiva dokumentacije</h4>
 						</GridCol>
+
 						{console.log('documents', documents)}
 						{documents.map((d) => (
-							<GridCol sizeXS={3}>
-								<a
-									href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}
-									target="_blank"
-								>
-									{d.fname}
-								</a>
+							// <GridCol sizeXS={3}>
+							// 	<a
+							// 		href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}
+							// 		target="_blank"
+							// 	>
+							// 		{d.fname}
+							// 	</a>
+							// </GridCol>
+							<GridCol sizeXS={4} className="ScrollStyle" style={{ padding: 0 }}>
+								<ListBox>
+									<ListBoxItem
+										link={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}
+										target="_blank"
+									>
+										{d.fname}
+									</ListBoxItem>
+								</ListBox>
 							</GridCol>
 						))}
 
