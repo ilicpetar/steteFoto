@@ -112,7 +112,9 @@ const LandingPage = ({ children }) => {
 		validate(state.brStete);
 
 		if (state.error) return inputRef.current.focus();
+
 		dispatch(show());
+
 		// ApiService.GetDamageById(state.brStete)
 		// 	.then((res) => {
 		// 		setState({
@@ -134,6 +136,7 @@ const LandingPage = ({ children }) => {
 		// 	})
 		// 	.catch((err) => {
 		// 		console.log(err);
+		// 		resetState();
 		// 		dispatch(hide());
 		// 	});
 
@@ -155,38 +158,115 @@ const LandingPage = ({ children }) => {
 		// 		dispatch(hide());
 		// 	});
 
+		//AO-14438/2020
 		try {
-			const [request1, request2, request3] = await Promise.all([
-				ApiService.GetDamageById(state.brStete),
-				ApiService.GetDamageArchiveLinks(state.brStete),
-				ApiService.GetDamageImages(state.brStete),
-			]);
+			ApiService.GetDamageById(state.brStete)
+				.then((res) => {
+					setState({
+						...state,
+						brStete: res.data[0].brStete,
+						vrstaOsiguranja: res.data[0].vrstaOsiguranja,
+						datumNastanka: res.data[0].datumNastanka,
+						datumPrijave: res.data[0].datumPrijave,
+						brObracunaStete: res.data[0].brObracunaStete,
+						datumLikvidacije: res.data[0].datumLikvidacije,
+						brPolise: res.data[0].brPolise,
+						osiguranik: res.data[0].osiguranik,
+						opis1: res.data[0].opis1,
+						opis2: res.data[0].opis2,
+						docPath: res.data[0].docPath,
+					});
 
-			setState({
-				...state,
-				brStete: request1.data[0].brStete,
-				vrstaOsiguranja: request1.data[0].vrstaOsiguranja,
-				datumNastanka: request1.data[0].datumNastanka,
-				datumPrijave: request1.data[0].datumPrijave,
-				brObracunaStete: request1.data[0].brObracunaStete,
-				datumLikvidacije: request1.data[0].datumLikvidacije,
-				brPolise: request1.data[0].brPolise,
-				osiguranik: request1.data[0].osiguranik,
-				opis1: request1.data[0].opis1,
-				opis2: request1.data[0].opis2,
-				docPath: request1.data[0].docPath,
-			});
+					ApiService.GetDamageImages(state.brStete)
+						.then((res) => {
+							setStateImages(res.data);
 
-			setDocuments(request2.data);
-			setStateImages(request3.data);
-			dispatch(hide());
-		} catch (err) {
-			console.log(err);
+							ApiService.GetDamageArchiveLinks(state.brStete)
+								.then((res) => {
+									setDocuments(res.data);
+								})
+								.catch((err) => {
+									console.log(err);
+									if (err.response.data === 'Fizički fajlovi ne postoje za ovu štetu.') {
+										console.log('Posalji obavestenje');
+									}
+									setDocuments([]);
+									dispatch(hide());
+								});
+						})
+						.catch((err) => {
+							if (err.response.data === 'Fizički fajlovi ne postoje za ovu štetu.') {
+								console.log('Posalji obavestenje');
+								setStateImages([]);
+
+								ApiService.GetDamageArchiveLinks(state.brStete)
+									.then((res) => {
+										setDocuments(res.data);
+									})
+									.catch((err) => {
+										console.log(err);
+										if (err.response.data === 'Fizički fajlovi ne postoje za ovu štetu.') {
+											console.log('Posalji obavestenje');
+										}
+										setDocuments([]);
+										dispatch(hide());
+									});
+							}
+
+							dispatch(hide());
+						});
+					dispatch(hide());
+				})
+				.catch((err) => {
+					console.log(err);
+					resetState();
+					dispatch(hide());
+				});
+		} catch (e) {
 			resetState();
 			dispatch(hide());
-			setState({ error: true });
 		}
+
+		// try {
+		// 	console.log('print premise');
+		// 	const [request2, request3] = await Promise.all([
+		// 		ApiService.GetDamageById(state.brStete),
+		// 		ApiService.GetDamageArchiveLinks(state.brStete),
+		// 		ApiService.GetDamageImages(state.brStete),
+		// 	]).catch((error) => {
+		// 		console.log('error catch1', error.response);
+		// 		if (error.response.data === 'Fizički fajlovi ne postoje za ovu štetu.') {
+		// 			console.log('Posalji obavestenje');
+		// 		}
+		// 		setDocuments([]);
+		// 		setStateImages([]);
+		// 	});
+
+		// setState({
+		// 	...state,
+		// 	brStete: request1.data[0].brStete,
+		// 	vrstaOsiguranja: request1.data[0].vrstaOsiguranja,
+		// 	datumNastanka: request1.data[0].datumNastanka,
+		// 	datumPrijave: request1.data[0].datumPrijave,
+		// 	brObracunaStete: request1.data[0].brObracunaStete,
+		// 	datumLikvidacije: request1.data[0].datumLikvidacije,
+		// 	brPolise: request1.data[0].brPolise,
+		// 	osiguranik: request1.data[0].osiguranik,
+		// 	opis1: request1.data[0].opis1,
+		// 	opis2: request1.data[0].opis2,
+		// 	docPath: request1.data[0].docPath,
+		// });
+
+		// 	setDocuments(request2.data);
+		// 	setStateImages(request3.data);
+		// 	dispatch(hide());
+		// } catch (err) {
+		// 	console.log('err promise', err);
+		// 	dispatch(hide());
+		// 	//setState({ error: true });
+		// }
 	};
+
 	const onImages = (values) => {
 		setStateImages(values);
 	};
