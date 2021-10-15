@@ -36,6 +36,7 @@
     "react-redux": "7.2.2",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
+    "react-toastify": "^8.0.3",
     "redux": "4.0.5",
     "redux-actions": "2.6.5",
     "redux-batched-actions": "0.5.0",
@@ -54,7 +55,7 @@
   },
   "main": "index.js",
   "name": "steteFoto",
-  "proxy":"http://t-ws.generali.rs:9001",
+  "proxy": "http://t-ws.generali.rs:9001",
   "private": true,
   "scripts": {
     "ci:build": "gef-scripts build --webpackConfig=./scripts/webpack-prod.config.js",

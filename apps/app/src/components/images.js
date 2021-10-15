@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useRef } from "react";
+import React, { useState,useEffect,useRef,forwardRef,useImperativeHandle } from "react";
 import ImageUploader from "react-images-upload";
 import Button from '@gef-ui/components/atoms/Button';	
 import { useDispatch } from 'react-redux';
@@ -7,11 +7,12 @@ import axios from 'axios';
 import ApiService from "../services/apiService";
 import * as config from "../services/config";
 import { hide, show, showAndHide, updateDescription } from '@gef-ui/features/modalLoader/actions';
+import { prop } from "ramda";
 
 
 
 
-const Images = props => {
+const Images = forwardRef((props,ref) => {
 
 
   useEffect(() => {
@@ -110,6 +111,16 @@ const Images = props => {
     pictureElement.current.clearPictures();
   }
 
+  useImperativeHandle(
+    ref,
+    () =>({getClearImages(){
+      onClearImages();
+      setPictures([]);
+      setIsLoading(false);
+    }
+    })
+  );
+
   return (
   
     <div className="container">
@@ -130,5 +141,5 @@ const Images = props => {
 
     
   );  
-};
+});
 export default Images;

@@ -28,8 +28,11 @@ import { REDUCER_NAME } from '@gef-ui/features/modalLoader/constants';
 import modalLoaderReducer from '@gef-ui/features/modalLoader/reducers/defaultReducer';
 import ModalLoaderProvider from '@gef-ui/features/modalLoader/containers/ModalLoaderProvider';
 import { hide, show, showAndHide, updateDescription } from '@gef-ui/features/modalLoader/actions';
-import Toastr from '@gef-ui/components/organisms/Toastr';
-import Toast from '@gef-ui/components/organisms/Toastr/Toast';
+// import Toastr, { Toast } from '@gef-ui/components/organisms/Toastr';
+// import { Toast } from '@gef-ui/components/organisms/Toastr/Toast';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.scss';
 
 // import { prefix } from './ModalLoader.routes';
 // import mdx from './ModalLoader.mdx';
@@ -43,6 +46,7 @@ const LandingPage = ({ children }) => {
 	}, []);
 
 	const inputRef = useRef(null);
+	const childRef = useRef();
 
 	const [state, setState] = useState({
 		brStete: '',
@@ -104,14 +108,48 @@ const LandingPage = ({ children }) => {
 		}
 	};
 
-	const toast = () => {
-		<Toast id={'error'} key={'error'} renderIco message="This is toast" type={'error'} />;
+	// const toast = () => {
+	// 	<Toast id={'error'} key={'error'} renderIco message="This is toast" type={'error'} />;
+	// };
+
+	const notify = (message, type = 'info') => {
+		console.log('toaster');
+		// toast.warn('Warning Notification !', {
+		// 	position: toast.POSITION.BOTTOM_LEFT,
+		// });
+
+		switch (type) {
+			case 'info':
+				toast.info(message, {
+					position: toast.POSITION.TOP_LEFT,
+				});
+				break;
+			case 'warn':
+				toast.warn(message, {
+					position: toast.POSITION.TOP_LEFT,
+				});
+				break;
+			case 'error':
+				toast.error(message, {
+					position: toast.POSITION.TOP_LEFT,
+				});
+				break;
+		}
+
+		// return (
+		//  <Toast id="xxx" renderIco message="This is timeout toast" type="error" timeout={50000} onClose={() => {}} />
+		// );
 	};
+
 	const handleApi = async () => {
+		childRef.current.getClearImages();
 		setState({ brStete: inputRef.current.value });
 		validate(state.brStete);
+		notify('Pretraga stete', 'info');
 
-		if (state.error) return inputRef.current.focus();
+		if (state.error) {
+			return inputRef.current.focus();
+		}
 
 		dispatch(show());
 
@@ -170,7 +208,7 @@ const LandingPage = ({ children }) => {
 						datumPrijave: res.data[0].datumPrijave,
 						brObracunaStete: res.data[0].brObracunaStete,
 						datumLikvidacije: res.data[0].datumLikvidacije,
-						brPolise: res.data[0].brPolise,
+						brPolise: res.data[0].brpolise,
 						osiguranik: res.data[0].osiguranik,
 						opis1: res.data[0].opis1,
 						opis2: res.data[0].opis2,
@@ -429,6 +467,7 @@ const LandingPage = ({ children }) => {
 						</GridCol>
 						<GridCol sizeXS={12}>
 							<ImageLoader
+								ref={childRef}
 								brStete={state.brStete}
 								copyTo={state.docPath}
 								onImages={onImages}
@@ -438,6 +477,7 @@ const LandingPage = ({ children }) => {
 					</Grid>
 				</Panel>
 			</ControlledDashboard>
+			<ToastContainer />
 			<ModalLoaderProvider />
 		</>
 	);
