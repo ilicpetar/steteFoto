@@ -15,9 +15,9 @@ import { prop } from "ramda";
 const Images = forwardRef((props,ref) => {
 
 
-  useEffect(() => {
-    console.log(pictures);
-  }, [pictures])
+  // useEffect(() => {
+  //   console.log(pictures);
+  // }, [pictures])
 
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -32,22 +32,7 @@ const Images = forwardRef((props,ref) => {
 
   const handleUpload=()=>{
     dispatch(show());
-    console.log(pictures);
-    console.log(props.brStete);
-
-    console.log(pictures[0][0]);
-
     setIsLoading(true);
-
-    // // po seljacki
-
-    // let data=new FormData();
-    // var file = pictures[0][0];
-    // data.append('file', file);
-
-
-
-
 
     let data=new FormData();
     for (var i = 0; i < pictures[0].length; i++) {
@@ -55,16 +40,13 @@ const Images = forwardRef((props,ref) => {
       // Add the file to the request.
      data.append('files', file);
      
-      console.log(file);
+      // console.log(file);
     }
 
     //console.log(data.files);
     //axios.post(`https://t-ws.generali.rs:20044/api/File/Uplouds?copyTo=${props.copyTo}`,data).then(res=>res.data).catch(err=>console.log(err));
 
     
-    console.log('prepoziva formdata');
-    console.log('data',data);
-
 
     // // radi
 
@@ -73,37 +55,31 @@ const Images = forwardRef((props,ref) => {
           "Content-Type": "multipart/form-data"
       }
       }).then(res=>{
-        console.log('api then',res);
         onClearImages();
         setPictures([]);
         setIsLoading(false);
         ApiService.GetDamageImages(props.brStete)
         .then((res) => {
-          console.log('api then images',res);
           props.onImages(res.data);
           dispatch(hide());
         })
-        .catch((err) => {console.log(err);dispatch(hide());}); 
+        .catch((err) => {notify('Doslo je do greske pri ucitavanju slika', 'error');dispatch(hide());}); 
       })
-      .catch(err=>{console.log('api err',err);setIsLoading(false);dispatch(hide());}); 
+      .catch(err=>{notify('Doslo je do greske pri uploudu slika', 'error');setIsLoading(false);dispatch(hide());}); 
   }
 
   const handlePDF = () =>{
     dispatch(show());
     ApiService.PostImagesToPDF(props.brStete)
     .then(res=>{
-      console.log('api then pdf',res)
-
       ApiService.GetDamageArchiveLinks(props.brStete)
 			.then((res) => {
-				console.log('documents api res', res);
 				props.onDocuments(res.data);
-				console.log('documents api', res.data);
         dispatch(hide());
 			})
-			.catch((err) => {console.log('documents err', err);dispatch(hide());});
+			.catch((err) => {notify('Doslo je greske pri ucitavanju arhive dokumentacije', 'error');dispatch(hide());});
     })
-    .catch(err=>{console.log('api err pdf',err);dispatch(hide());});
+    .catch(err=>{notify('Doslo je greske pri kreiranju PDF-a', 'error');dispatch(hide());});
 
   }
 

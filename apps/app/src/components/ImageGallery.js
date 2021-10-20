@@ -66,7 +66,7 @@ import vozilo1 from '../../assets/images/vozila/skoda1.jpg';
 function ImageGallery({photos}) {
       
 
-    console.log(window.innerWidth,window.innerHeight)
+    // console.log(window.innerWidth,window.innerHeight)
 
     
 
@@ -78,7 +78,7 @@ function ImageGallery({photos}) {
               thumbnailHeight: 320  
            } 
     ))
-    console.log('IMAGES galery',IMAGES)
+    // console.log('IMAGES galery',IMAGES)
   return <Gallery images={IMAGES} backdropClosesModal={true}/>
 
 }

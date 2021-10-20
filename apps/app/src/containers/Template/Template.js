@@ -113,7 +113,6 @@ const LandingPage = ({ children }) => {
 	// };
 
 	const notify = (message, type = 'info') => {
-		console.log('toaster');
 		// toast.warn('Warning Notification !', {
 		// 	position: toast.POSITION.BOTTOM_LEFT,
 		// });
@@ -121,17 +120,17 @@ const LandingPage = ({ children }) => {
 		switch (type) {
 			case 'info':
 				toast.info(message, {
-					position: toast.POSITION.TOP_LEFT,
+					position: toast.POSITION.TOP_RIGHT,
 				});
 				break;
 			case 'warn':
 				toast.warn(message, {
-					position: toast.POSITION.TOP_LEFT,
+					position: toast.POSITION.TOP_RIGHT,
 				});
 				break;
 			case 'error':
 				toast.error(message, {
-					position: toast.POSITION.TOP_LEFT,
+					position: toast.POSITION.TOP_RIGHT,
 				});
 				break;
 		}
@@ -145,7 +144,6 @@ const LandingPage = ({ children }) => {
 		childRef.current.getClearImages();
 		setState({ brStete: inputRef.current.value });
 		validate(state.brStete);
-		notify('Pretraga stete', 'info');
 
 		if (state.error) {
 			return inputRef.current.focus();
@@ -224,17 +222,17 @@ const LandingPage = ({ children }) => {
 									setDocuments(res.data);
 								})
 								.catch((err) => {
-									console.log(err);
-									if (err.response.data === 'Fizički fajlovi ne postoje za ovu štetu.') {
-										console.log('Posalji obavestenje');
+									if (err.response.data.status === 404) {
+										notify('Trazena steta nema arhivu dokumentacije', 'info');
 									}
 									setDocuments([]);
 									dispatch(hide());
+									notify('Doslo je do greske ucitavanja arhive', 'error');
 								});
 						})
 						.catch((err) => {
-							if (err.response.data === 'Fizički fajlovi ne postoje za ovu štetu.') {
-								console.log('Posalji obavestenje');
+							if (err.response.data.status === 404) {
+								notify('Trazena steta nema snimljene fotografije', 'info');
 								setStateImages([]);
 
 								ApiService.GetDamageArchiveLinks(state.brStete)
@@ -242,27 +240,29 @@ const LandingPage = ({ children }) => {
 										setDocuments(res.data);
 									})
 									.catch((err) => {
-										console.log(err);
-										if (err.response.data === 'Fizički fajlovi ne postoje za ovu štetu.') {
-											console.log('Posalji obavestenje');
+										if (err.response.data.status === 404) {
+											notify('Trazena steta nema arhivu dokumentacije', 'info');
 										}
 										setDocuments([]);
 										dispatch(hide());
+										notify('Doslo je do greske ucitavanja arhive', 'error');
 									});
 							}
 
 							dispatch(hide());
+							//notify('Doslo je do greske ucitavanja slike', 'error');
 						});
 					dispatch(hide());
 				})
 				.catch((err) => {
-					console.log(err);
 					resetState();
 					dispatch(hide());
+					notify('Doslo je do greske u pretragi stete', 'error');
 				});
 		} catch (e) {
 			resetState();
 			dispatch(hide());
+			notify('Doslo je do greske u pretragi stete - fatal error', 'error');
 		}
 
 		// try {
@@ -440,7 +440,7 @@ const LandingPage = ({ children }) => {
 							<h4>Arhiva dokumentacije</h4>
 						</GridCol>
 
-						{console.log('documents', documents)}
+						{/* {console.log('documents', documents)} */}
 						{documents.map((d) => (
 							// <GridCol sizeXS={3}>
 							// 	<a
