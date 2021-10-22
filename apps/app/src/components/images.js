@@ -31,6 +31,8 @@ const Images = forwardRef((props,ref) => {
   };
 
   const handleUpload=()=>{
+    console.log('slike',pictures)
+    console.log('slike od 0',pictures[0])
     dispatch(show());
     setIsLoading(true);
 
@@ -48,7 +50,7 @@ const Images = forwardRef((props,ref) => {
 
     
 
-    // // radi
+    // radi
 
     axios.post(`${config.APIENDPOINT}/File/DamageUplouds?brStete=${props.brStete}`,data,{
       headers: {
@@ -63,24 +65,29 @@ const Images = forwardRef((props,ref) => {
           props.onImages(res.data);
           dispatch(hide());
         })
-        .catch((err) => {notify('Doslo je do greske pri ucitavanju slika', 'error');dispatch(hide());}); 
+        .catch((err) => {props.notify('Doslo je do greske pri ucitavanju slika', 'error');dispatch(hide());}); 
       })
-      .catch(err=>{notify('Doslo je do greske pri uploudu slika', 'error');setIsLoading(false);dispatch(hide());}); 
+      .catch(err=>{props.notify('Doslo je do greske pri uploudu slika', 'error');setIsLoading(false);dispatch(hide());}); 
   }
 
   const handlePDF = () =>{
     dispatch(show());
-    ApiService.PostImagesToPDF(props.brStete)
+    try {
+    ApiService.PostImagesToPDF(props.brStete,333)
     .then(res=>{
       ApiService.GetDamageArchiveLinks(props.brStete)
 			.then((res) => {
 				props.onDocuments(res.data);
         dispatch(hide());
 			})
-			.catch((err) => {notify('Doslo je greske pri ucitavanju arhive dokumentacije', 'error');dispatch(hide());});
+			.catch((err) => {dispatch(hide());props.notify('Doslo je greske pri ucitavanju arhive dokumentacije', 'error');});
     })
-    .catch(err=>{notify('Doslo je greske pri kreiranju PDF-a', 'error');dispatch(hide());});
-
+    .catch(err=>{dispatch(hide());props.notify('Doslo je greske pri kreiranju PDF-a', 'error');});
+    }catch (e) {
+			
+			dispatch(hide());
+			props.notify('Doslo je do greske prilikom kreiranja PDF-a - fatal error', 'error');
+    }
   }
 
   const onClearImages= () => {

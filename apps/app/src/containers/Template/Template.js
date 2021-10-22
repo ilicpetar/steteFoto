@@ -249,8 +249,10 @@ const LandingPage = ({ children }) => {
 									});
 							}
 
+							if (err.response.data.status !== 404) {
+								notify('Doslo je do greske ucitavanja slike', 'error');
+							}
 							dispatch(hide());
-							//notify('Doslo je do greske ucitavanja slike', 'error');
 						});
 					dispatch(hide());
 				})
@@ -472,6 +474,7 @@ const LandingPage = ({ children }) => {
 								copyTo={state.docPath}
 								onImages={onImages}
 								onDocuments={onDocuments}
+								notify={notify}
 							/>
 						</GridCol>
 					</Grid>
