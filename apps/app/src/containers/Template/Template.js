@@ -50,16 +50,17 @@ const LandingPage = ({ children }) => {
 
 	const [state, setState] = useState({
 		brStete: '',
-		vrstaOsiguranja: '',
+		vrstaosiguranja: '',
 		datumNastanka: '',
 		datumPrijave: '',
 		brObracunaStete: '',
 		datumLikvidacije: '',
 		brPolise: '',
 		osiguranik: '',
-		opis: '',
+		opis1: '',
 		opis2: '',
 		docPath: '',
+		resena: false,
 		error: false,
 		images: [],
 	});
@@ -68,22 +69,23 @@ const LandingPage = ({ children }) => {
 	const [stateImages, setStateImages] = useState([]);
 	const [isChecked, setIsChecked] = useState(false);
 	const handleCheckboxChange = (event) => {
-		setIsChecked(event.target.checked);
+		setIsChecked(!event.target.checked);
 	};
 
 	const resetState = () => {
 		setState({
 			brStete: '',
-			vrstaOsiguranja: '',
+			vrstaosiguranja: '',
 			datumNastanka: '',
 			datumPrijave: '',
 			brObracunaStete: '',
 			datumLikvidacije: '',
 			brPolise: '',
 			osiguranik: '',
-			opis: '',
+			opis1: '',
 			opis2: '',
 			docPath: '',
+			resena: false,
 			error: false,
 			images: [],
 		});
@@ -145,6 +147,11 @@ const LandingPage = ({ children }) => {
 		setState({ brStete: inputRef.current.value });
 		validate(state.brStete);
 
+		if (state.brStete === '' || state.brStete === ' ') {
+			notify('Niste uneli broj štete!', 'info');
+			return inputRef.current.focus();
+		}
+
 		if (state.error) {
 			return inputRef.current.focus();
 		}
@@ -198,10 +205,11 @@ const LandingPage = ({ children }) => {
 		try {
 			ApiService.GetDamageById(state.brStete)
 				.then((res) => {
+					console.log('api', res.data[0]);
 					setState({
 						...state,
 						brStete: res.data[0].brStete,
-						vrstaOsiguranja: res.data[0].vrstaOsiguranja,
+						vrstaosiguranja: res.data[0].vrstaosiguranja,
 						datumNastanka: res.data[0].datumNastanka,
 						datumPrijave: res.data[0].datumPrijave,
 						brObracunaStete: res.data[0].brObracunaStete,
@@ -211,6 +219,7 @@ const LandingPage = ({ children }) => {
 						opis1: res.data[0].opis1,
 						opis2: res.data[0].opis2,
 						docPath: res.data[0].docPath,
+						resena: res.data[0].resena == -1 ? true : false,
 					});
 
 					ApiService.GetDamageImages(state.brStete)
@@ -257,6 +266,7 @@ const LandingPage = ({ children }) => {
 					dispatch(hide());
 				})
 				.catch((err) => {
+					console.log('api', err);
 					resetState();
 					dispatch(hide());
 					notify('Doslo je do greske u pretragi stete', 'error');
@@ -362,8 +372,8 @@ const LandingPage = ({ children }) => {
 							<TextField
 								floatingLabelText="Vrsta osiguranja"
 								outline="true"
-								name="vrstaOsiguranja"
-								value={state.vrstaOsiguranja}
+								name="vrstaosiguranja"
+								value={state.vrstaosiguranja}
 								onChange={handleChange}
 							/>
 						</GridCol>
@@ -416,7 +426,7 @@ const LandingPage = ({ children }) => {
 							<Checkbox
 								label="Rešena"
 								name="resena"
-								checked={isChecked}
+								checked={state.resena}
 								onChange={handleCheckboxChange}
 							/>
 						</GridCol>
@@ -424,8 +434,8 @@ const LandingPage = ({ children }) => {
 							<TextField
 								floatingLabelText="Opis"
 								outline="true"
-								name="opis"
-								value={state.opis}
+								name="opis1"
+								value={state.opis1}
 								onChange={handleChange}
 							/>
 						</GridCol>

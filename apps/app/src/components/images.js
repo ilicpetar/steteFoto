@@ -31,8 +31,14 @@ const Images = forwardRef((props,ref) => {
   };
 
   const handleUpload=()=>{
-    console.log('slike',pictures)
-    console.log('slike od 0',pictures[0])
+    if (props.brStete == '') {
+      props.notify('Niste izabrali štetu za snimanje slike!', 'error');
+      return;
+    }
+    if (pictures.length < 1) {
+      props.notify('Niste izabrali nijednu sliku!', 'error');
+      return;
+    }
     dispatch(show());
     setIsLoading(true);
 
@@ -71,6 +77,10 @@ const Images = forwardRef((props,ref) => {
   }
 
   const handlePDF = () =>{
+    if (props.brStete == '') {
+      props.notify('Niste izabrali štetu za kreiranje PDF-a!', 'error');
+      return;
+    }
     dispatch(show());
     try {
     ApiService.PostImagesToPDF(props.brStete,333)
@@ -114,11 +124,13 @@ const Images = forwardRef((props,ref) => {
       imgExtension={[".jpg", ".gif", ".png", ".gif",".jpeg"]}
       maxFileSize={7242880}
       withPreview={true}
+      label={'Prihvatljivi formati slike su : jpg | jpeg | png | gif'}
+      buttonText={'Odaberite slike'}
       ref={pictureElement}
     />
     <div align="right">
-    <Button label="Upload" primary onClick={handleUpload}/>&nbsp;
-    <Button label="Create PDF" align="right" primary onClick={handlePDF}/>
+    <Button label="Snimi slike" primary onClick={handleUpload}/>&nbsp;
+    <Button label="Kreiraj PDF" align="right" primary onClick={handlePDF}/>
      </div>     
     </div>
 
