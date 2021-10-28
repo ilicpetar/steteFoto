@@ -205,7 +205,6 @@ const LandingPage = ({ children }) => {
 		try {
 			ApiService.GetDamageById(state.brStete)
 				.then((res) => {
-					console.log('api', res.data[0]);
 					setState({
 						...state,
 						brStete: res.data[0].brStete,
@@ -266,7 +265,6 @@ const LandingPage = ({ children }) => {
 					dispatch(hide());
 				})
 				.catch((err) => {
-					console.log('api', err);
 					resetState();
 					dispatch(hide());
 					notify('Doslo je do greske u pretragi stete', 'error');

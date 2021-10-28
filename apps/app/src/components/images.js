@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useRef,forwardRef,useImperativeHandle } from "react";
+import React, { useState,useEffect,useRef,forwardRef,useImperativeHandle,useCallback } from "react";
 import ImageUploader from "react-images-upload";
 import Button from '@gef-ui/components/atoms/Button';	
 import { useDispatch } from 'react-redux';
@@ -9,28 +9,23 @@ import * as config from "../services/config";
 import { hide, show, showAndHide, updateDescription } from '@gef-ui/features/modalLoader/actions';
 import { prop } from "ramda";
 
+ const Images = forwardRef((props,ref) => {
 
 
-
-const Images = forwardRef((props,ref) => {
-
-
-  // useEffect(() => {
-  //   console.log(pictures);
-  // }, [pictures])
-
-  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [pictures, setPictures] = useState([]);
 
+  const dispatch = useDispatch();
   const pictureElement = useRef(null);
+
   
-  const onDrop = picture => {    
-    setPictures([picture]);
-    
+  const onDrop = (picture) => {
+    setPictures([...pictures, picture])  
   };
 
+
   const handleUpload=()=>{
+    
     if (props.brStete == '') {
       props.notify('Niste izabrali štetu za snimanje slike!', 'error');
       return;
@@ -39,16 +34,17 @@ const Images = forwardRef((props,ref) => {
       props.notify('Niste izabrali nijednu sliku!', 'error');
       return;
     }
-    dispatch(show());
+    dispatch(show());  
     setIsLoading(true);
 
+    let picturesFiles=pictures[pictures.length-1]
+
     let data=new FormData();
-    for (var i = 0; i < pictures[0].length; i++) {
-      var file = pictures[0][i];    
+    for (var i = 0; i < picturesFiles.length; i++) {
+      // var file = pictures[0][i]; //ovako bilo
+      var file = picturesFiles[i];   
       // Add the file to the request.
-     data.append('files', file);
-     
-      // console.log(file);
+     data.append('files', file); 
     }
 
     //console.log(data.files);
@@ -58,13 +54,17 @@ const Images = forwardRef((props,ref) => {
 
     // radi
 
+    // setPictures([]);
+    
+
     axios.post(`${config.APIENDPOINT}/File/DamageUplouds?brStete=${props.brStete}`,data,{
       headers: {
           "Content-Type": "multipart/form-data"
       }
       }).then(res=>{
         onClearImages();
-        setPictures([]);
+        // setPictures([]);
+        
         setIsLoading(false);
         ApiService.GetDamageImages(props.brStete)
         .then((res) => {
@@ -73,7 +73,9 @@ const Images = forwardRef((props,ref) => {
         })
         .catch((err) => {props.notify('Doslo je do greske pri ucitavanju slika', 'error');dispatch(hide());}); 
       })
-      .catch(err=>{props.notify('Doslo je do greske pri uploudu slika', 'error');setIsLoading(false);dispatch(hide());}); 
+      .catch(err=>{props.notify('Doslo je do greske pri uploudu slika', 'error');setIsLoading(false);dispatch(hide());onClearImages();}); 
+
+     
   }
 
   const handlePDF = () =>{
@@ -101,14 +103,17 @@ const Images = forwardRef((props,ref) => {
   }
 
   const onClearImages= () => {
-    pictureElement.current.clearPictures();
+    pictureElement.current.clearPictures(); 
+    pictureElement.current.state.pictures = [];
+    pictureElement.current.state.files = [];  
+    setPictures([]); 
   }
 
   useImperativeHandle(
     ref,
     () =>({getClearImages(){
       onClearImages();
-      setPictures([]);
+      // setPictures([]);
       setIsLoading(false);
     }
     })
@@ -136,5 +141,6 @@ const Images = forwardRef((props,ref) => {
 
     
   );  
-});
+}); 
+
 export default Images;
