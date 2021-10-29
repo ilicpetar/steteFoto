@@ -127,7 +127,7 @@ import { prop } from "ramda";
       withIcon={true}
       onChange={onDrop}
       imgExtension={[".jpg", ".gif", ".png", ".gif",".jpeg"]}
-      maxFileSize={7242880}
+      maxFileSize={15728640}
       withPreview={true}
       label={'Prihvatljivi formati slike su : jpg | jpeg | png | gif'}
       buttonText={'Odaberite slike'}

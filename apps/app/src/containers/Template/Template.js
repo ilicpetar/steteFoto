@@ -338,7 +338,16 @@ const LandingPage = ({ children }) => {
 					footerElement={<div>Generali Osiguranje Srbija</div>}
 				>
 					<Grid className="example-background">
-						<GridCol sizeXS={4}>
+						<GridCol
+							sizeMD={4}
+							// sizeXS={number('sizeXS', 2)}
+							// sizeSM={number('sizeSM', 2)}
+							// sizeMD={number('sizeMD', 2)}
+							// sizeLG={number('sizeLG', 2)}
+							// sizeXL={number('sizeXL', 2)}
+							// sizeALL={number('sizeALL', 2)}
+							// pushesForDisplays={[{ [GridDisplaySizes.XS]: number('pushesForDisplays', 1) }]}
+						>
 							<TextField
 								required
 								autofocus
@@ -354,10 +363,10 @@ const LandingPage = ({ children }) => {
 								ref={inputRef}
 							/>
 						</GridCol>
-						<GridCol sizeXS={8}>
+						<GridCol sizeMD={8}>
 							<Button label="Traži" primary onClick={handleApi} />
 						</GridCol>
-						<GridCol sizeXS={3}>
+						<GridCol sizeMD={3} sizeSM={12}>
 							<TextField
 								floatingLabelText="Broj polise"
 								outline="true"
@@ -366,7 +375,7 @@ const LandingPage = ({ children }) => {
 								onChange={handleChange}
 							/>
 						</GridCol>
-						<GridCol sizeXS={3}>
+						<GridCol sizeMD={3} sizeSM={12}>
 							<TextField
 								floatingLabelText="Vrsta osiguranja"
 								outline="true"
@@ -375,7 +384,7 @@ const LandingPage = ({ children }) => {
 								onChange={handleChange}
 							/>
 						</GridCol>
-						<GridCol sizeXS={3}>
+						<GridCol sizeMD={3} sizeSM={12}>
 							<TextField
 								floatingLabelText="Osiguranik"
 								outline="true"
@@ -384,7 +393,7 @@ const LandingPage = ({ children }) => {
 								onChange={handleChange}
 							/>
 						</GridCol>
-						<GridCol sizeXS={3}>
+						<GridCol sizeMD={3} sizeSM={12}>
 							<TextField
 								floatingLabelText="Broj obračuna štete"
 								outline="true"
@@ -393,7 +402,7 @@ const LandingPage = ({ children }) => {
 								onChange={handleChange}
 							/>
 						</GridCol>
-						<GridCol sizeXS={3}>
+						<GridCol sizeMD={3} sizeSM={12}>
 							<TextField
 								floatingLabelText="Datum prijave"
 								outline="true"
@@ -402,7 +411,7 @@ const LandingPage = ({ children }) => {
 								onChange={handleChange}
 							/>
 						</GridCol>
-						<GridCol sizeXS={3}>
+						<GridCol sizeMD={3} sizeSM={12}>
 							<TextField
 								floatingLabelText="Datum nastanka"
 								outline="true"
@@ -411,7 +420,7 @@ const LandingPage = ({ children }) => {
 								onChange={handleChange}
 							/>
 						</GridCol>
-						<GridCol sizeXS={3}>
+						<GridCol sizeMD={3} sizeSM={12}>
 							<TextField
 								floatingLabelText="Datum likvidacije"
 								outline="true"
@@ -420,7 +429,7 @@ const LandingPage = ({ children }) => {
 								onChange={handleChange}
 							/>
 						</GridCol>
-						<GridCol sizeXS={3}>
+						<GridCol sizeMD={3} sizeSM={12}>
 							<Checkbox
 								label="Rešena"
 								name="resena"
@@ -428,7 +437,7 @@ const LandingPage = ({ children }) => {
 								onChange={handleCheckboxChange}
 							/>
 						</GridCol>
-						<GridCol sizeXS={9}>
+						<GridCol sizeMD={9} sizeSM={12}>
 							<TextField
 								floatingLabelText="Opis"
 								outline="true"
@@ -437,7 +446,7 @@ const LandingPage = ({ children }) => {
 								onChange={handleChange}
 							/>
 						</GridCol>
-						<GridCol sizeXS={12}>
+						<GridCol sizeMD={12}>
 							<TextField
 								floatingLabelText="Dodatni opis"
 								outline="true"
@@ -446,13 +455,13 @@ const LandingPage = ({ children }) => {
 								onChange={handleChange}
 							/>
 						</GridCol>
-						<GridCol sizeXS={12}>
+						<GridCol sizeMD={12}>
 							<h4>Arhiva dokumentacije</h4>
 						</GridCol>
 
 						{/* {console.log('documents', documents)} */}
 						{documents.map((d) => (
-							// <GridCol sizeXS={3}>
+							// <GridCol sizeMD={3}>
 							// 	<a
 							// 		href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}
 							// 		target="_blank"
@@ -460,7 +469,7 @@ const LandingPage = ({ children }) => {
 							// 		{d.fname}
 							// 	</a>
 							// </GridCol>
-							<GridCol sizeXS={4} className="ScrollStyle" style={{ padding: 0 }}>
+							<GridCol sizeMD={4} className="ScrollStyle" style={{ padding: 0 }}>
 								<ListBox>
 									<ListBoxItem
 										link={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}
@@ -472,10 +481,10 @@ const LandingPage = ({ children }) => {
 							</GridCol>
 						))}
 
-						<GridCol sizeXS={12} className="m--lg">
+						<GridCol sizeMD={12} className="m--lg">
 							<ImageGallery photos={stateImages} />
 						</GridCol>
-						<GridCol sizeXS={12}>
+						<GridCol sizeMD={12}>
 							<ImageLoader
 								ref={childRef}
 								brStete={state.brStete}
