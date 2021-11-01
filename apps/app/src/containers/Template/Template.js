@@ -41,9 +41,9 @@ import 'react-toastify/dist/ReactToastify.scss';
 const LandingPage = ({ children }) => {
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		inputRef.current.focus();
-	}, []);
+	// useEffect(() => {
+	// 	inputRef.current.focus();
+	// }, []);
 
 	const inputRef = useRef(null);
 	const childRef = useRef();
