@@ -3,3 +3,9 @@
 * {
   box-sizing: border-box;
 }
+
+@media (max-width: 980px) {
+  .Dashboard {
+    min-width: 100% !important;
+  }
+}

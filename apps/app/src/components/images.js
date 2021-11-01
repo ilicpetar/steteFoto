@@ -8,6 +8,13 @@ import ApiService from "../services/apiService";
 import * as config from "../services/config";
 import { hide, show, showAndHide, updateDescription } from '@gef-ui/features/modalLoader/actions';
 import { prop } from "ramda";
+import {
+	Grid,
+	GridCol,
+  GridAlignTypes,
+  pushesForDisplays,
+  GridDisplaySizes
+} from '@gef-ui/components/organisms/Grid';
 
  const Images = forwardRef((props,ref) => {
 
@@ -134,8 +141,18 @@ import { prop } from "ramda";
       ref={pictureElement}
     />
     <div align="right">
-    <Button label="Snimi slike" primary onClick={handleUpload}/>&nbsp;
-    <Button label="Kreiraj PDF" align="right" primary onClick={handlePDF}/>
+      <Grid  alignmentsForDisplays= {GridAlignTypes.right} >
+      <GridCol sizeSM={12} sizeMD={8}>  
+			  </GridCol>
+        <GridCol sizeSM={12} sizeMD={2}>
+          <Button label="Snimi slike" primary onClick={handleUpload}/>
+			  </GridCol>
+        <GridCol sizeSM={12} sizeMD={2}>
+          <Button label="Kreiraj PDF" primary onClick={handlePDF}/>
+			  </GridCol>
+      </Grid>
+    {/* <Button label="Snimi slike" primary onClick={handleUpload}/>&nbsp;
+    <Button label="Kreiraj PDF" align="right" primary onClick={handlePDF}/> */}
      </div>     
     </div>
 
