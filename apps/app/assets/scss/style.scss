@@ -1,5 +1,19 @@
 @import '@gef-ui/components/assets/scss/gcptheme';
 
-* {
-  box-sizing: border-box;
+@media (max-width: 960px) {
+  // .RadioButtonGroup--segmentedControl.RadioButtonGroup--inline {
+
+  //   flex-direction: column;
+
+  // }
+
+  // .RadioButtonGroup--segmentedControl.RadioButtonGroup--inline .RadioButtonGroup-item {
+
+  //   margin: 2px 2px!important;
+
+  // }
+
+  .Dashboard {
+    min-width: 100% !important;
+  }
 }

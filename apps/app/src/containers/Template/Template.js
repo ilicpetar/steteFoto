@@ -30,9 +30,15 @@ import ModalLoaderProvider from '@gef-ui/features/modalLoader/containers/ModalLo
 import { hide, show, showAndHide, updateDescription } from '@gef-ui/features/modalLoader/actions';
 // import Toastr, { Toast } from '@gef-ui/components/organisms/Toastr';
 // import { Toast } from '@gef-ui/components/organisms/Toastr/Toast';
+import Table from 'react-bootstrap/Table';
+import { Container, Row,Col } from 'react-bootstrap';
 
 import { ToastContainer, toast } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.scss';
 import 'react-toastify/dist/ReactToastify.scss';
+
+
+
 
 // import { prefix } from './ModalLoader.routes';
 // import mdx from './ModalLoader.mdx';
@@ -460,9 +466,45 @@ const LandingPage = ({ children }) => {
 						<GridCol sizeMD={12} sizeSM={12} sizeXS={12}>
 							<h4>Arhiva dokumentacije</h4>
 						</GridCol>
+						<GridCol sizeMD={12} sizeSM={12} sizeXS={12}>
+					    <div style={{maxHeight:"350px", overflow:"scroll"}}>
+						<Table striped bordered hover header-fixed>
+						<thead>
+							<tr>
+							<th>#</th>
+							<th>Datum</th>
+							<th>Naziv fajla</th>
+							<th>Korisnik</th>
+							</tr>
+						</thead>
+						<tbody>
+						{documents.map((d,i) => (
+							<tr>
+							<td>{i+1}</td>
+							<td>{d.datSnimio}</td>
+							<td><a href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}>{d.fname}</a></td>
+							<td>{d.userSnimio}</td>
+							</tr>
+							))}
+						</tbody>
+						</Table>
+				         </div>
+						{/* <Container sizeMD={12} sizeXS={12}>
+						<Row>
+							<Col sm={2}>ID</Col>
+							<Col sm={4}>Naziv fajla</Col>
+						</Row>
+						{documents.map((d) => (
+						<Row>
+							<Col sm={2}>{d.id}</Col>
+							<Col sm={4}><a href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}>{d.fname}</a></Col>
+						</Row>
+							))}
+						</Container> */}
+						</GridCol>
 
 						{/* {console.log('documents', documents)} */}
-						{documents.map((d) => (
+						{/* {documents.map((d) => (
 							// <GridCol sizeMD={3}>
 							// 	<a
 							// 		href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}
@@ -481,7 +523,7 @@ const LandingPage = ({ children }) => {
 									</ListBoxItem>
 								</ListBox>
 							</GridCol>
-						))}
+						))} */}
 
 						<GridCol sizeMD={12} sizeSM={12} sizeXS={12} className="m--lg">
 							<ImageGallery photos={stateImages} />
