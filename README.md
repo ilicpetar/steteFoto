@@ -24,6 +24,20 @@ v12.18.3
 `ci:createPackageToDeploy appName AT` CI script to archive final build into **`appName`\_static.war** package with
 configuration for AT environment.
 
+Izmena file-ova da bi prosao build
+
+folder steteFoto\node_modules\@gef-ui\gef-scripts\webpack izmeniti file devTemplate.ejs. dodati meta tag <meta name="viewport" content="width=device-width">
+
+folder steteFoto\node_modules\bootstrap\dist\css rename fajla u bootstrap.min.scss
+
+rename file-a steteFoto\node_modules\react-toastify\dist\ReactToastify.scss
+
+/node_modules/react-images-upload/index.css rename u .scss
+
+i file-u /node_modules/react-images-upload/compiled.js rename gde ima index.css u .scss (require('./index.scss');)
+
+slika GENERALI koja se prikazuje pri ucitavanju Modalnog prozora kopira se u folder steteFoto\node_modules\@gef-ui\components\assets\images a ime slike je 'generaliceskapojistovna-secondary-logo.svg'
+
 ## Project structure
 
 For complete guideline how GEF application should be structured have a look at our confluence
