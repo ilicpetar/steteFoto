@@ -18,6 +18,7 @@ import {
 
  const Images = forwardRef((props,ref) => {
 
+  // console.log('props',props.a, props.b );
 
   const [isLoading, setIsLoading] = useState(false);
   const [pictures, setPictures] = useState([]);
@@ -92,7 +93,7 @@ import {
     }
     dispatch(show());
     try {
-    ApiService.PostImagesToPDF(props.brStete,333)
+    ApiService.PostImagesToPDF(props.brStete,props.a,props.b)
     .then(res=>{
       ApiService.GetDamageArchiveLinks(props.brStete)
 			.then((res) => {

@@ -19,8 +19,8 @@ class ApiService {
         return axios.get(`${config.APIENDPOINT}/File/GetDamageArchiveFile?brstete=${brStete}`);
     }
 
-    static PostImagesToPDF(brStete,IDUser){
-        return axios.post(`${config.APIENDPOINT}/File/ImagesToPdf?brStete=${brStete}&IDUser=${IDUser}`);
+    static PostImagesToPDF(brStete,a,b){
+        return axios.post(`${config.APIENDPOINT}/File/ImagesToPdf?brStete=${brStete}&a=${a}&b=${b}`);
     }
     
     static PostDamageUploads(brStete,data){

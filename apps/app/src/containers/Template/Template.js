@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -31,14 +32,11 @@ import { hide, show, showAndHide, updateDescription } from '@gef-ui/features/mod
 // import Toastr, { Toast } from '@gef-ui/components/organisms/Toastr';
 // import { Toast } from '@gef-ui/components/organisms/Toastr/Toast';
 import Table from 'react-bootstrap/Table';
-import { Container, Row,Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.scss';
 import 'react-toastify/dist/ReactToastify.scss';
-
-
-
 
 // import { prefix } from './ModalLoader.routes';
 // import mdx from './ModalLoader.mdx';
@@ -46,6 +44,13 @@ import 'react-toastify/dist/ReactToastify.scss';
 //komntar
 const LandingPage = ({ children }) => {
 	const dispatch = useDispatch();
+
+	const location = useLocation();
+
+	const search = location.search;
+	const a = new URLSearchParams(search).get('a');
+	const b = new URLSearchParams(search).get('b');
+	// console.log({ a, b });
 
 	// useEffect(() => {
 	// 	inputRef.current.focus();
@@ -467,29 +472,35 @@ const LandingPage = ({ children }) => {
 							<h4>Arhiva dokumentacije</h4>
 						</GridCol>
 						<GridCol sizeMD={12} sizeSM={12} sizeXS={12}>
-					    <div style={{maxHeight:"350px", overflow:"scroll"}}>
-						<Table striped bordered hover header-fixed>
-						<thead>
-							<tr>
-							<th>#</th>
-							<th>Datum</th>
-							<th>Naziv fajla</th>
-							<th>Korisnik</th>
-							</tr>
-						</thead>
-						<tbody>
-						{documents.map((d,i) => (
-							<tr>
-							<td>{i+1}</td>
-							<td>{d.datSnimio}</td>
-							<td><a href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}>{d.fname}</a></td>
-							<td>{d.userSnimio}</td>
-							</tr>
-							))}
-						</tbody>
-						</Table>
-				         </div>
-						{/* <Container sizeMD={12} sizeXS={12}>
+							<div style={{ maxHeight: '350px', overflow: 'scroll' }}>
+								<Table striped bordered hover header-fixed>
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Datum</th>
+											<th>Naziv fajla</th>
+											<th>Korisnik</th>
+										</tr>
+									</thead>
+									<tbody>
+										{documents.map((d, i) => (
+											<tr>
+												<td>{i + 1}</td>
+												<td>{d.datSnimio}</td>
+												<td>
+													<a
+														href={`https://t-ws.generali.rs/Api/QRcips/api/File/GetDamageArchiveFile?brstete=${d.id}&fileID=${d.fileID}`}
+													>
+														{d.fname}
+													</a>
+												</td>
+												<td>{d.userSnimio}</td>
+											</tr>
+										))}
+									</tbody>
+								</Table>
+							</div>
+							{/* <Container sizeMD={12} sizeXS={12}>
 						<Row>
 							<Col sm={2}>ID</Col>
 							<Col sm={4}>Naziv fajla</Col>
@@ -536,6 +547,8 @@ const LandingPage = ({ children }) => {
 								onImages={onImages}
 								onDocuments={onDocuments}
 								notify={notify}
+								a={a}
+								b={b}
 							/>
 						</GridCol>
 					</Grid>
